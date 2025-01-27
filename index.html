@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3D Stopwatch - 2045</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/daisyui@1.0.0-alpha.10/dist/full.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <style>
+
+
+    .digit {
+      font-size: 4rem;
+      font-weight: bold;
+      color: #FFF;
+      text-shadow: 0 0 10px rgba(0,0,0,0.7);
+    }
+    
+    .btn {
+      background-color: #2b2d42;
+      color: white;
+    }
+
+    .btn:hover {
+      background-color: #8d99ae;
+     
+    }
+  </style>
+</head>
+<body class="bg-gray-900 text-white">
+
+<div class="flex justify-center items-center h-screen bg-gradient-to-r from-blue-500 to-indigo-600">
+  <div class="stopwatch p-8 rounded-3xl shadow-lg text-center">
+    <!-- Stopwatch display -->
+    <div class="stopwatch-item mb-4">
+      <span class="digit" id="hours">00</span>:<span class="digit" id="minutes">00</span>:<span class="digit" id="seconds">00</span>
+    </div>
+
+    <!-- Stopwatch Controls -->
+    <div class="flex justify-around">
+      <button id="startStopBtn" class="btn p-3 rounded-lg w-24">Start</button>
+      <button id="resetBtn" class="btn p-3 rounded-lg w-24">Reset</button>
+    </div>
+  </div>
+</div>
+
+<!-- jQuery & Script -->
+<script>
+  $(document).ready(function(){
+    let timer;
+    let isRunning = false;
+    let hours = 0, minutes = 0, seconds = 0;
+    function updateDisplay() {
+      $('#hours').text(hours < 10 ? '0' + hours : hours);
+      $('#minutes').text(minutes < 10 ? '0' + minutes : minutes);
+      $('#seconds').text(seconds < 10 ? '0' + seconds : seconds);
+    }
+
+    // Start or stop the timer
+    $('#startStopBtn').click(function() {
+      if (!isRunning) {
+        // Start Timer
+        timer = setInterval(function() {
+          seconds++;
+          if (seconds == 60) {
+            seconds = 0;
+            minutes++;
+            if (minutes == 60) {
+              minutes = 0;
+              hours++;
+            }
+          }
+          updateDisplay();
+        }, 1000);
+        $(this).text('Stop');
+      } else {
+        // Stop Timer
+        clearInterval(timer);
+        $(this).text('Resume');
+      }
+      isRunning = !isRunning;
+    });
+
+    // Reset the timer
+    $('#resetBtn').click(function() {
+      clearInterval(timer);
+      hours = 0;
+      minutes = 0;
+      seconds = 0;
+      updateDisplay();
+      $('#startStopBtn').text('Start');
+      isRunning = false;
+    });
+
+    // Initial Display Update
+    updateDisplay();
+  });
+</script>
+
+</body>
+</html>
